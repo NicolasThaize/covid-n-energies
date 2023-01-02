@@ -4,3 +4,6 @@ L’objectif de ce data storytelling est de mettre en avant la consommation et l
 
 ## Installation Linux/MacOs
 1. À la racine du projet, lancer la commande `make install_requirements`
+
+## Lancer l'application Linux/MacOs
+2. À la racine du projet, lancer la commande `run`
