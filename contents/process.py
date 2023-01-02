@@ -23,7 +23,6 @@ def process_chart_1(chart_1_global_data):
         chart_1_global_data.reset_index(), 
         x="date", 
         y="pos", 
-        title='Nombre de nouveaux cas en France',
         labels={
                         "date": "Date",
                         "pos": "Nombre de cas",
@@ -41,7 +40,7 @@ def process_chart_1(chart_1_global_data):
             )
     return chart_1
 
-def get_chart_7_data():
+def get_chart_7_data(start_date, end_date):
     df_ener_2019 = pd.read_csv('data/part-energies/xls/part-energies-2019.xls', sep='\t', encoding='latin-1', index_col=False, usecols=lambda x: x not in [' Stockage batterie', 'DÈstockage batterie', 'Eolien terrestre', 'Eolien offshore'])
     df_ener_2020 = pd.read_csv('data/part-energies/xls/part-energies-2020.xls', sep='\t', encoding='latin-1', index_col=False,usecols=lambda x: x not in [' Stockage batterie', 'DÈstockage batterie', 'Eolien terrestre', 'Eolien offshore'])
     df_ener_2021 = pd.read_csv('data/part-energies/xls/part-energies-2021-debut-2022.xls', sep='\t', encoding='latin-1', index_col=False,usecols=lambda x: x not in [' Stockage batterie', 'DÈstockage batterie', 'Eolien terrestre', 'Eolien offshore'])
@@ -51,7 +50,7 @@ def get_chart_7_data():
     dates = pd.to_datetime(df_concat['Date'] + df_concat['Heures'], format='%Y-%m-%d%H:%M')
     df_concat.insert(1, "FullDate", dates)
     df_concat = df_concat.set_index('FullDate')
-    return df_concat.loc[:, energies]
+    return df_concat.loc[((df_concat['Date'] > start_date) & (df_concat['Date'] < end_date)), energies]
 
 def process_chart_7(chart_7_data):
     data = []
@@ -62,15 +61,12 @@ def process_chart_7(chart_7_data):
             stackgroup='one',
             name=energy
         ))
-    chart_1 = go.Figure(data)
-    for covid_phase in covid_phases: # Adding vertical spans/lines for each covid phase
-        if covid_phase['type'] == 'span':
-            chart_1.add_vrect(x0=covid_phase['min'], x1=covid_phase['max'], line_width=0, fillcolor=covid_phase['color'], opacity=0.3, annotation_text=covid_phase['label'], annotation_textangle=90)
-        else:
-            chart_1.add_vline(x=covid_phase['min'], line_color=covid_phase['color'])
-            chart_1.add_annotation(
-                x=covid_phase['min'],
-                text=covid_phase['label'],
-                textangle=270,
-            )
+    chart_1 = go.Figure(
+        data,
+        layout=go.Layout(
+            yaxis=dict(title="Production en MW"),
+            xaxis=dict(title="Date")
+        )
+    )
+    
     return chart_1
