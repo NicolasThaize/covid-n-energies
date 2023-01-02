@@ -1,7 +1,8 @@
 import pandas as pd
 from contents.utils import holidays_dates
 import plotly.express as px
-from contents.utils import covid_phases
+from contents.utils import covid_phases, energies
+import plotly.graph_objects as go
 
 # Processing data manipulation to return chart 1 final dataframe
 def get_chart_1_data(mask=True):
@@ -28,6 +29,40 @@ def process_chart_1(chart_1_global_data):
                         "pos": "Nombre de cas",
         }
     )
+    for covid_phase in covid_phases: # Adding vertical spans/lines for each covid phase
+        if covid_phase['type'] == 'span':
+            chart_1.add_vrect(x0=covid_phase['min'], x1=covid_phase['max'], line_width=0, fillcolor=covid_phase['color'], opacity=0.3, annotation_text=covid_phase['label'], annotation_textangle=90)
+        else:
+            chart_1.add_vline(x=covid_phase['min'], line_color=covid_phase['color'])
+            chart_1.add_annotation(
+                x=covid_phase['min'],
+                text=covid_phase['label'],
+                textangle=270,
+            )
+    return chart_1
+
+def get_chart_7_data():
+    df_ener_2019 = pd.read_csv('data/part-energies/xls/part-energies-2019.xls', sep='\t', encoding='latin-1', index_col=False, usecols=lambda x: x not in [' Stockage batterie', 'DÈstockage batterie', 'Eolien terrestre', 'Eolien offshore'])
+    df_ener_2020 = pd.read_csv('data/part-energies/xls/part-energies-2020.xls', sep='\t', encoding='latin-1', index_col=False,usecols=lambda x: x not in [' Stockage batterie', 'DÈstockage batterie', 'Eolien terrestre', 'Eolien offshore'])
+    df_ener_2021 = pd.read_csv('data/part-energies/xls/part-energies-2021-debut-2022.xls', sep='\t', encoding='latin-1', index_col=False,usecols=lambda x: x not in [' Stockage batterie', 'DÈstockage batterie', 'Eolien terrestre', 'Eolien offshore'])
+    df_ener_2022 = pd.read_csv('data/part-energies/xls/part-energies-fin-2022.xls', sep='\t', encoding='latin-1', index_col=False,usecols=lambda x: x not in [' Stockage batterie', 'DÈstockage batterie', 'Eolien terrestre', 'Eolien offshore'])
+    df_concat = pd.concat([df_ener_2019, df_ener_2020, df_ener_2021, df_ener_2022], ignore_index=True)
+    df_concat = df_concat.loc[(~df_concat['Consommation'].isnull())]
+    dates = pd.to_datetime(df_concat['Date'] + df_concat['Heures'], format='%Y-%m-%d%H:%M')
+    df_concat.insert(1, "FullDate", dates)
+    df_concat = df_concat.set_index('FullDate')
+    return df_concat.loc[:, energies]
+
+def process_chart_7(chart_7_data):
+    data = []
+    for energy in energies:
+        data.append(go.Scatter(
+            x = chart_7_data.index,
+            y = chart_7_data[energy],
+            stackgroup='one',
+            name=energy
+        ))
+    chart_1 = go.Figure(data)
     for covid_phase in covid_phases: # Adding vertical spans/lines for each covid phase
         if covid_phase['type'] == 'span':
             chart_1.add_vrect(x0=covid_phase['min'], x1=covid_phase['max'], line_width=0, fillcolor=covid_phase['color'], opacity=0.3, annotation_text=covid_phase['label'], annotation_textangle=90)
