@@ -50,7 +50,7 @@ def get_chart_7_data(start_date, end_date):
     dates = pd.to_datetime(df_concat['Date'] + df_concat['Heures'], format='%Y-%m-%d%H:%M')
     df_concat.insert(1, "FullDate", dates)
     df_concat = df_concat.set_index('FullDate')
-    return df_concat.loc[((df_concat['Date'] > start_date) & (df_concat['Date'] < end_date)), energies]
+    return df_concat.loc[((df_concat['Date'] >= start_date) & (df_concat['Date'] <= end_date)), energies]
 
 def process_chart_7(chart_7_data):
     data = []
