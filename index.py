@@ -23,7 +23,7 @@ chart_1 = process_chart_1(chart_1_global_data)
 st.plotly_chart(chart_1, use_container_width=True)
 
 # CHART 7
-st.header('Répartition de la production d\'énergie en MW')
+st.header('Production d\'électricité par filière (en MW)')
 col1, col2 = st.columns(2)
 with col1:
     start_date = st.date_input(
