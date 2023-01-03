@@ -68,5 +68,10 @@ def process_chart_7(chart_7_data):
             xaxis=dict(title="Date")
         )
     )
-    
+
+    chart_1.update_layout(
+        autosize=False,
+        height=550,
+    )
+        
     return chart_1
