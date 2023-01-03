@@ -1,8 +1,9 @@
 import pandas as pd
-from contents.utils import holidays_dates
 import plotly.express as px
-from contents.utils import covid_phases, energies
+from contents.utils import covid_phases, energies, holidays_dates
+from contents.sides import is_date_between
 import plotly.graph_objects as go
+from datetime import datetime
 
 # Processing data manipulation to return chart 1 final dataframe
 def get_chart_1_data(mask=True):
@@ -52,7 +53,7 @@ def get_chart_7_data(start_date, end_date):
     df_concat = df_concat.set_index('FullDate')
     return df_concat.loc[((df_concat['Date'] >= start_date) & (df_concat['Date'] <= end_date)), energies]
 
-def process_chart_7(chart_7_data):
+def process_chart_7(chart_7_data, start_date, end_date):
     data = []
     for energy in energies:
         data.append(go.Scatter(
@@ -72,6 +73,19 @@ def process_chart_7(chart_7_data):
     chart_1.update_layout(
         autosize=False,
         height=550,
-    )
-        
+    ) # Increasing chart height
+
+    for covid_phase in covid_phases: # Adding vertical spans/lines for each covid phase
+        range_min = datetime.strptime(start_date, "%Y-%m-%d") # Convert YYYY-MM-DD string into Python date object
+        range_max = datetime.strptime(end_date, "%Y-%m-%d") # Convert YYYY-MM-DD string into Python date object
+        if (is_date_between(datetime.strptime(covid_phase['min'], "%Y-%m-%d"), range_min, range_max) and (is_date_between(datetime.strptime(covid_phase['max'], "%Y-%m-%d"), range_min, range_max))): # If covid phase is in chart date range
+            if covid_phase['type'] == 'span': # Add span type phase
+                chart_1.add_vrect(x0=covid_phase['min'], x1=covid_phase['max'], line_width=0, fillcolor=covid_phase['color'], opacity=0.3, annotation_text=covid_phase['label'], annotation_textangle=90)
+            else: # Add line type phase
+                chart_1.add_vline(x=covid_phase['min'], line_color=covid_phase['color'])
+                chart_1.add_annotation(
+                    x=covid_phase['min'],
+                    text=covid_phase['label'],
+                    textangle=270,
+                )
     return chart_1

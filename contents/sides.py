@@ -19,3 +19,6 @@ def get_df_youngest_date_index(df):
 def convert_np_datetime64_to_date(datetime):
     print(datetime)
     return datetime.item()
+
+def is_date_between(date, min, max):
+    return (min <= date <= max)

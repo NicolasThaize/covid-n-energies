@@ -3,7 +3,6 @@ import streamlit_toggle as tog
 from datetime import datetime
 
 from contents.process import get_chart_1_data, process_chart_1, get_chart_7_data, process_chart_7
-from contents.sides import get_df_oldest_date_index, get_df_youngest_date_index, convert_np_datetime64_to_date
 
 st.set_page_config(layout="wide")
 st.title('Data Storytelling Covid19 - Énergies')
@@ -36,6 +35,6 @@ with col2:
 start_date = start_date.strftime('%Y-%m-%d')
 end_date = end_date.strftime('%Y-%m-%d')
 chart_7_global_data = get_chart_7_data(start_date, end_date) # Loading whole chart data
-chart_7 = process_chart_7(chart_7_global_data)
+chart_7 = process_chart_7(chart_7_global_data, start_date, end_date)
 st.plotly_chart(chart_7, use_container_width=True)
 
