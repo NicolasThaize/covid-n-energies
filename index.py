@@ -19,16 +19,18 @@ chart_1_toggle = tog.st_toggle_switch(
 ) # Streamlit toggler 
 chart_1_global_data = get_chart_1_data(chart_1_toggle) # Loading whole chart data
 chart_1 = process_chart_1(chart_1_global_data)
-st.plotly_chart(chart_1)
+st.plotly_chart(chart_1, use_container_width=True)
 
 # CHART 3
+st.header('Consommation brute d\'électricté en France (MW)')
 chart_3_4_global_data = get_chart_3_4_data() # Loading whole chart data
 chart_3 = process_chart_3(chart_3_4_global_data)
-st.plotly_chart(chart_3)
+st.plotly_chart(chart_3, use_container_width=True)
 
 # CHART 3
+st.header('Consommation brute de gaz en France (MW)')
 chart_4 = process_chart_4(chart_3_4_global_data)
-st.plotly_chart(chart_4)
+st.plotly_chart(chart_4, use_container_width=True)
 st.plotly_chart(chart_1, use_container_width=True)
 
 # CHART 7

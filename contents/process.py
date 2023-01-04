@@ -93,7 +93,6 @@ def process_chart_3(chart_3_global_data):
         chart_3_global_data.reset_index(), 
         x=chart_3_global_data.index, 
         y=chart_3_global_data["Conso_elec_totale_MW"], 
-        title='Consommation brute d\'électricté en France (MW)',
         labels={
             "x": "Date",
             "y": "Consommation (MW)",
@@ -117,7 +116,6 @@ def process_chart_4(chart_4_global_data):
         chart_4_global_data.reset_index(), 
         x=chart_4_global_data.index, 
         y=chart_4_global_data["Conso_gaz_totale_MW"], 
-        title='Consommation brute de gaz en France (MW)',
         labels={
             "x": "Date",
             "y": "Consommation (MW)",
