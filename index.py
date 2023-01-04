@@ -33,7 +33,6 @@ st.plotly_chart(chart_3, use_container_width=True)
 st.header('Consommation brute de gaz en France (MW)')
 chart_4 = process_chart_4(chart_3_4_global_data)
 st.plotly_chart(chart_4, use_container_width=True)
-st.plotly_chart(chart_1, use_container_width=True)
 
 # CHART 7
 st.header('Production d\'électricité par filière (en MW)')
