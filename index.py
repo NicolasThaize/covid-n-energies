@@ -61,12 +61,10 @@ st.header('Evolution de la part de production d\'énergie par filières')
 chart_10_data = get_chart_7_data(datetime(2019, 1, 1).strftime('%Y-%m-%d'),datetime(2022, 12, 30).strftime('%Y-%m-%d'))
 col1, col2 = st.columns(2)
 with col1:
-    chart_10_phase = st.selectbox('Phase du covid', get_covid_phases_labels_in_list())
+    chart_10_phase = st.selectbox('Phase du covid', get_covid_phases_labels_in_list(), index=2)
 
 with col2:
-    chart_10_compare = st.selectbox('Comparer avec', compare_with_year)
-
-print(chart_10_phase, chart_10_compare)
+    chart_10_compare = st.selectbox('Comparer avec', compare_with_year, index=1)
 
 chart_10 = process_chart_10(chart_10_data, chart_10_phase, chart_10_compare)
 st.plotly_chart(chart_10, use_container_width=True)
