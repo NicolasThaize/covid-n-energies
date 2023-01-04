@@ -47,7 +47,7 @@ def get_df_moved_year(df_global, move_year_by, base_df_date_range):
 def process_evolution_percentage(df1,df2):
     sub = df2.reset_index().select_dtypes('number').subtract(df1.reset_index().select_dtypes('number'), axis=0)
     div = sub.divide(df1.reset_index().select_dtypes('number'), axis=0)
-    return div.loc[~div['Fioul'].isnull()] *100
+    return div.loc[~div['Fioul'].isnull()]
 
 def generate_xticks_labels(df1, df2):
     date = df1.index.strftime('%m-%d %H:%M').tolist()
