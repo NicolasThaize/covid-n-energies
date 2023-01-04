@@ -191,9 +191,12 @@ def process_chart_10(chart_10_data):
     date_range = covid_phases[0]
     phase_1 = get_rows_by_date_range(chart_10_data, date_range)
     phase_2 = get_df_moved_year(chart_10_data, 1, date_range)
-    evolution = process_evolution_percentage(phase_1, phase_2)
-    x_axis_labels = generate_xticks_labels(phase_1, phase_2)
-    final_data = evolution.loc[~evolution['Fioul'].isnull()] *100
+
+    phase_1_percentage = get_percentages(phase_1.loc[:, energies])
+    phase_2_percentage = get_percentages(phase_2.loc[:, energies])
+    evolution = process_evolution_percentage(phase_1_percentage, phase_2_percentage)
+    x_axis_labels = generate_xticks_labels(phase_1_percentage, phase_2_percentage)
+    final_data = evolution.loc[~evolution['Fioul'].isnull()]
     final_data.index = x_axis_labels
 
     fig = make_subplots(rows=2, cols=4)
