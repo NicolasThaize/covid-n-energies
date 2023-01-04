@@ -136,10 +136,10 @@ def process_chart_4(chart_4_global_data):
 
 
 def get_chart_7_data(start_date, end_date):
-    df_ener_2019 = pd.read_csv('data/part-energies/xls/part-energies-2019.xls', sep='\t', encoding='latin-1', index_col=False, usecols=lambda x: x not in [' Stockage batterie', 'DÈstockage batterie', 'Eolien terrestre', 'Eolien offshore'])
-    df_ener_2020 = pd.read_csv('data/part-energies/xls/part-energies-2020.xls', sep='\t', encoding='latin-1', index_col=False,usecols=lambda x: x not in [' Stockage batterie', 'DÈstockage batterie', 'Eolien terrestre', 'Eolien offshore'])
-    df_ener_2021 = pd.read_csv('data/part-energies/xls/part-energies-2021-debut-2022.xls', sep='\t', encoding='latin-1', index_col=False,usecols=lambda x: x not in [' Stockage batterie', 'DÈstockage batterie', 'Eolien terrestre', 'Eolien offshore'])
-    df_ener_2022 = pd.read_csv('data/part-energies/xls/part-energies-fin-2022.xls', sep='\t', encoding='latin-1', index_col=False,usecols=lambda x: x not in [' Stockage batterie', 'DÈstockage batterie', 'Eolien terrestre', 'Eolien offshore'])
+    df_ener_2019 = pd.read_csv('data/part-energies/XLS/part-energies-2019.xls', sep='\t', encoding='latin-1', index_col=False, usecols=lambda x: x not in [' Stockage batterie', 'DÈstockage batterie', 'Eolien terrestre', 'Eolien offshore'])
+    df_ener_2020 = pd.read_csv('data/part-energies/XLS/part-energies-2020.xls', sep='\t', encoding='latin-1', index_col=False,usecols=lambda x: x not in [' Stockage batterie', 'DÈstockage batterie', 'Eolien terrestre', 'Eolien offshore'])
+    df_ener_2021 = pd.read_csv('data/part-energies/XLS/part-energies-2021-debut-2022.xls', sep='\t', encoding='latin-1', index_col=False,usecols=lambda x: x not in [' Stockage batterie', 'DÈstockage batterie', 'Eolien terrestre', 'Eolien offshore'])
+    df_ener_2022 = pd.read_csv('data/part-energies/XLS/part-energies-fin-2022.xls', sep='\t', encoding='latin-1', index_col=False,usecols=lambda x: x not in [' Stockage batterie', 'DÈstockage batterie', 'Eolien terrestre', 'Eolien offshore'])
     df_concat = pd.concat([df_ener_2019, df_ener_2020, df_ener_2021, df_ener_2022], ignore_index=True)
     df_concat = df_concat.loc[(~df_concat['Consommation'].isnull())]
     dates = pd.to_datetime(df_concat['Date'] + df_concat['Heures'], format='%Y-%m-%d%H:%M')
@@ -196,10 +196,9 @@ def process_chart_10(chart_10_data, selected_phase_label, compare_label):
     phase_1_percentage = get_percentages(phase_1.loc[:, energies])
     phase_2_percentage = get_percentages(phase_2.loc[:, energies])
     evolution = process_evolution_percentage(phase_1_percentage, phase_2_percentage)
-    x_axis_labels = generate_xticks_labels(phase_1_percentage, phase_2_percentage)
     final_data = evolution.loc[~evolution['Fioul'].isnull()]
-    final_data.index = x_axis_labels
-
+    final_data.index = phase_2_percentage.index
+    
     fig = make_subplots(rows=2, cols=4)
     row = 1
     col = 1
@@ -217,7 +216,10 @@ def process_chart_10(chart_10_data, selected_phase_label, compare_label):
             col = 1
             row = 2
     
-    fig.update_layout(height=1200)
+    year_1 = phase_1.index.strftime('%Y').tolist()[0]
+    year_2 = phase_2.index.strftime('%Y').tolist()[0]
+    x_axis_label = year_1 + "/" + year_2
+    fig.update_layout(height=1200, xaxis_title=x_axis_label, yaxis_title="Evolution part (en%)")
 
     return fig
 
