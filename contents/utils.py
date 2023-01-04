@@ -59,3 +59,4 @@ covid_phases = [
 ]
 
 energies = ["Fioul","Charbon","Gaz","Nucléaire","Eolien","Solaire","Hydraulique","Pompage","Bioénergies"]
+compare_with_year = ["Année -1", "Année +1"]

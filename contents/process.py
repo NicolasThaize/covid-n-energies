@@ -187,10 +187,11 @@ def process_chart_7(chart_7_data, start_date, end_date):
                 )
     return chart_1
 
-def process_chart_10(chart_10_data):
-    date_range = covid_phases[0]
+def process_chart_10(chart_10_data, selected_phase_label, compare_label):
+    date_range = next(item for item in covid_phases if item["label"] == selected_phase_label)
+    move_year = int(compare_label.split(' ')[1])
     phase_1 = get_rows_by_date_range(chart_10_data, date_range)
-    phase_2 = get_df_moved_year(chart_10_data, 1, date_range)
+    phase_2 = get_df_moved_year(chart_10_data, move_year, date_range)
 
     phase_1_percentage = get_percentages(phase_1.loc[:, energies])
     phase_2_percentage = get_percentages(phase_2.loc[:, energies])

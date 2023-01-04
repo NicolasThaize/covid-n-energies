@@ -3,6 +3,8 @@ import streamlit_toggle as tog
 from datetime import datetime
 
 from contents.process import get_chart_1_data, process_chart_1, get_chart_3_4_data, process_chart_3, process_chart_4, get_chart_7_data, process_chart_7, process_chart_10
+from contents.sides import get_covid_phases_labels_in_list
+from contents.utils import compare_with_year
 
 st.set_page_config(layout="wide")
 st.title('Data Storytelling Covid19 - Énergies')
@@ -53,5 +55,14 @@ st.plotly_chart(chart_7, use_container_width=True)
 # CHART 10
 st.header('Evolution de la part de production d\'énergie par filières')
 chart_10_data = get_chart_7_data(datetime(2019, 1, 1).strftime('%Y-%m-%d'),datetime(2022, 12, 30).strftime('%Y-%m-%d'))
-chart_10 = process_chart_10(chart_10_data)
+col1, col2 = st.columns(2)
+with col1:
+    chart_10_phase = st.selectbox('Phase du covid', get_covid_phases_labels_in_list())
+
+with col2:
+    chart_10_compare = st.selectbox('Comparer avec', compare_with_year)
+
+print(chart_10_phase, chart_10_compare)
+
+chart_10 = process_chart_10(chart_10_data, chart_10_phase, chart_10_compare)
 st.plotly_chart(chart_10, use_container_width=True)

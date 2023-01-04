@@ -1,4 +1,5 @@
 from datetime import datetime
+from contents.utils import covid_phases
 
 def chart_1_slide_start_date(dataframe):
     slide_start_date = get_df_oldest_date_index(dataframe)
@@ -61,3 +62,7 @@ def generate_xticks_labels(df1, df2):
 def get_percentages(row):
     total = int(row.sum(axis=1).values[0])
     return row.applymap(lambda p: p/total*100)
+
+
+def get_covid_phases_labels_in_list():
+    return [covid_phase["label"] for covid_phase in covid_phases]
