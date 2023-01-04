@@ -7,3 +7,12 @@ L’objectif de ce data storytelling est de mettre en avant la consommation et l
 
 ## Lancer l'application Linux/MacOs
 2. À la racine du projet, lancer la commande `make run` ou `streamlit run index.py`
+
+## Description de l'application
+
+* index.py : Construction de la page WEB contenant les graphiques
+* contents/ : Package servant à l'élaboration des graphiques
+* contents/process.py : Algorithmes de récupération des données, de mise en forme des données et de création des graphiques
+* contents/sides.py : Fonctions de manipulation des dataframes et de données
+* contents/utils.py : Variables globales
+* data/ : Dossier contenant les données brutes utilisées pour le datastorytelling
