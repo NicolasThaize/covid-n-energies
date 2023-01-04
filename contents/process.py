@@ -1,7 +1,7 @@
 import pandas as pd
 import plotly.express as px
-from contents.utils import covid_phases, energies, holidays_dates, fioul_feats, gaz_feats, bioenergies_feats, hydrauliques_feats
-from contents.sides import is_date_between, get_rows_by_date_range, get_df_moved_year, process_evolution_percentage, get_percentages, sum_columns_values
+from contents.utils import covid_phases, energies, holidays_dates, fioul_feats, gaz_feats, bioenergies_feats, hydrauliques_feats, energies_2
+from contents.sides import is_date_between, get_rows_by_date_range, get_df_moved_year, process_evolution_percentage, get_percentages, sum_columns_values, process_evolution_percentage_df_8_9
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from datetime import datetime
@@ -85,7 +85,7 @@ def get_chart_3_4_data():
     df_energie["MA_max_7j"] = rolling_max_7j
 
     df_last_3y = df_energie.loc[df_energie.index >= '2018-01-01']
-
+    print(df_last_3y.columns)
     return df_last_3y # Final chart data
 
 # Processing plotly manipulations to return chart 3 plot
@@ -190,6 +190,69 @@ def process_chart_7(chart_7_data, start_date, end_date):
                     textangle=270,
                 )
     return chart_1
+
+def get_chart_8_9_data():
+    df_source = pd.read_csv("data/consommation-quotidienne-brute.csv", delimiter=";")
+
+    df_energie = df_source.drop(columns=[
+        "Date","Heure",
+        "Consommation brute gaz (MW PCS 0°C) - GRTgaz",
+        "Statut - GRTgaz","Consommation brute gaz (MW PCS 0°C) - Teréga",
+        "Statut - Teréga"
+    ])
+
+    df_energie.columns = ["Date","Conso_gaz_totale_MW","Conso_elec_totale_MW","Statut","Conso_brute_totale_MW"]
+
+    # Constitution des formats de date
+    df_energie["FullDate"] = pd.to_datetime(df_energie["Date"], utc=True)
+    df_energie["FullDate"] = df_energie["FullDate"].dt.tz_convert('Europe/Paris') # On repasse donc en heure FR
+
+    df_energie["Date"]     = df_energie['FullDate'].dt.strftime('%Y-%m-%d')
+    df_energie["Heures"]   = df_energie['FullDate'].dt.strftime('%H:%M:%S')
+
+    df_energie.sort_values(by=["FullDate"], ascending=True, inplace=True) # Ordre chronologique
+    df_energie.reset_index(drop=True, inplace=True)
+
+    # Passage de la colonne date en index
+    df_energie.set_index('FullDate', inplace=True)
+
+    # Les mesures de ce Dataset sont arrêtées au 05/31/2022
+    df_energie = df_energie.loc[df_energie.index < "2022-05-31"]
+
+    df_energie["Conso_gaz_totale_MW"]   = df_energie["Conso_gaz_totale_MW"].interpolate(method='linear', axis=0)
+    df_energie["Conso_elec_totale_MW"]  = df_energie["Conso_elec_totale_MW"].interpolate(method='linear', axis=0)
+    df_energie["Conso_brute_totale_MW"] = df_energie["Conso_brute_totale_MW"].interpolate(method='linear', axis=0)
+    return df_energie
+
+def process_chart_8_9(chart_8_9_data, selected_phase_label, compare_label):
+    date_range = next(item for item in covid_phases if item["label"] == selected_phase_label)
+    move_year = int(compare_label.split(' ')[1])
+    phase_1 = get_rows_by_date_range(chart_8_9_data, date_range)
+    phase_2 = get_df_moved_year(chart_8_9_data, move_year, date_range)
+    div = process_evolution_percentage_df_8_9(phase_1, phase_2)
+    final_data = div.loc[~div['Conso_gaz_totale_MW'].isnull()]
+    final_data.index = phase_2.index
+
+    fig = make_subplots(rows=1, cols=3)
+    row = 1
+    col = 1
+    for energy in energies_2:
+        fig.add_trace(
+            go.Scatter(x=final_data.index, 
+            y=final_data[energy],
+            name=energy
+            ),
+            row=row, 
+            col=col
+        )
+        col = col + 1
+    
+    year_1 = phase_1.index.strftime('%Y').tolist()[0]
+    year_2 = phase_2.index.strftime('%Y').tolist()[0]
+    x_axis_label = year_1 + "/" + year_2
+    fig.update_layout(xaxis_title=x_axis_label, yaxis_title="Evolution consommation brute (en %)")
+
+    return fig
 
 def process_chart_10(chart_10_data, selected_phase_label, compare_label):
     date_range = next(item for item in covid_phases if item["label"] == selected_phase_label)

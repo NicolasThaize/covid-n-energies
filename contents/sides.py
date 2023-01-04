@@ -49,6 +49,11 @@ def process_evolution_percentage(df1,df2):
     div = sub.divide(df1.reset_index().select_dtypes('number'), axis=0)
     return div.loc[~div['Fioul'].isnull()]
 
+def process_evolution_percentage_df_8_9(df1,df2):
+    sub = df2.reset_index().select_dtypes('number').subtract(df1.reset_index().select_dtypes('number'), axis=0)
+    div = sub.divide(df1.reset_index().select_dtypes('number'), axis=0)
+    return div.loc[~div['Conso_gaz_totale_MW'].isnull()] *100
+
 def generate_xticks_labels(df1, df2):
     date = df1.index.strftime('%m-%d %H:%M').tolist()
     date = [s + " - " for s in date]

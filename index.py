@@ -1,8 +1,7 @@
 import streamlit as st
 import streamlit_toggle as tog
 from datetime import datetime
-
-from contents.process import get_chart_1_data, process_chart_1, get_chart_3_4_data, process_chart_3, process_chart_4, get_chart_7_data, process_chart_7, process_chart_10
+from contents.process import get_chart_1_data, process_chart_1, get_chart_3_4_data, process_chart_3, process_chart_4, get_chart_7_data, process_chart_7, process_chart_10, process_chart_8_9, get_chart_8_9_data
 from contents.sides import get_covid_phases_labels_in_list
 from contents.utils import compare_with_year
 
@@ -55,15 +54,29 @@ chart_7_global_data = get_chart_7_data(start_date, end_date) # Loading whole cha
 chart_7 = process_chart_7(chart_7_global_data, start_date, end_date)
 st.plotly_chart(chart_7, use_container_width=True)
 
+# CHART 8 9
+st.header('Evolution de la part de la consommation d\'énergie brute (MW)')
+chart_8_9_data = get_chart_8_9_data()
+col1, col2 = st.columns(2)
+with col1:
+    chart_8_9_phase = st.selectbox('Phase du covid', get_covid_phases_labels_in_list(), index=2, key=3)
+
+with col2:
+    chart_8_9_compare = st.selectbox('Comparer avec', compare_with_year, index=1, key=4)
+
+chart_8_9 = process_chart_8_9(chart_8_9_data, chart_8_9_phase, chart_8_9_compare)
+st.plotly_chart(chart_8_9, use_container_width=True)
+
+
 # CHART 10
 st.header('Evolution de la part de production d\'énergie par filières')
 chart_10_data = get_chart_7_data(datetime(2019, 1, 1).strftime('%Y-%m-%d'),datetime(2022, 12, 30).strftime('%Y-%m-%d'))
 col1, col2 = st.columns(2)
 with col1:
-    chart_10_phase = st.selectbox('Phase du covid', get_covid_phases_labels_in_list(), index=2)
+    chart_10_phase = st.selectbox('Phase du covid', get_covid_phases_labels_in_list(), index=2, key=5)
 
 with col2:
-    chart_10_compare = st.selectbox('Comparer avec', compare_with_year, index=1)
+    chart_10_compare = st.selectbox('Comparer avec', compare_with_year, index=1, key=6)
 
 chart_10 = process_chart_10(chart_10_data, chart_10_phase, chart_10_compare)
 st.plotly_chart(chart_10, use_container_width=True)

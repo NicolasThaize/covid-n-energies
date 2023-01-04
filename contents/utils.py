@@ -59,6 +59,8 @@ covid_phases = [
 ]
 
 energies = ["Fioul","Charbon","Gaz","Nucléaire","Eolien","Solaire","Hydraulique","Bioénergies"]
+energies_2 = ["Conso_gaz_totale_MW","Conso_elec_totale_MW","Conso_brute_totale_MW"]
+
 fioul_feats = ['Fioul', 'Fioul - TAC', 'Fioul - Cogén.', 'Fioul - Autres']
 gaz_feats = ['Gaz', 'Gaz - TAC', 'Gaz - Cogén.', 'Gaz - CCG', 'Gaz - Autres']
 hydrauliques_feats = ['Hydraulique', 'Hydraulique - Fil de l?eau + éclusée', 'Hydraulique - Lacs', 'Hydraulique - STEP turbinage']
