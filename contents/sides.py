@@ -66,3 +66,10 @@ def get_percentages(row):
 
 def get_covid_phases_labels_in_list():
     return [covid_phase["label"] for covid_phase in covid_phases]
+
+def sum_columns_values(df, columns, new_name):
+    df_clean = df.copy()
+    col = df.loc[:, columns].sum(axis=1)
+    df_clean.drop(columns, axis=1, inplace=True)
+    df_clean.insert(1, new_name, col)
+    return df_clean

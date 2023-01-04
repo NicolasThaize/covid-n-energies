@@ -59,4 +59,9 @@ covid_phases = [
 ]
 
 energies = ["Fioul","Charbon","Gaz","Nucléaire","Eolien","Solaire","Hydraulique","Pompage","Bioénergies"]
+fioul_feats = ['Fioul', 'Fioul - TAC', 'Fioul - Cogén.', 'Fioul - Autres']
+gaz_feats = ['Gaz', 'Gaz - TAC', 'Gaz - Cogén.', 'Gaz - CCG', 'Gaz - Autres']
+hydrauliques_feats = ['Hydraulique', 'Hydraulique - Fil de l?eau + éclusée', 'Hydraulique - Lacs', 'Hydraulique - STEP turbinage']
+bioenergies_feats = ['Bioénergies - Déchets', 'Bioénergies - Biomasse','Bioénergies - Biogaz', 'Bioénergies']
+
 compare_with_year = ["Année -1", "Année +1"]

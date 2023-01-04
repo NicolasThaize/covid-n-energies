@@ -1,7 +1,7 @@
 import pandas as pd
 import plotly.express as px
-from contents.utils import covid_phases, energies, holidays_dates
-from contents.sides import is_date_between, get_rows_by_date_range, get_df_moved_year, process_evolution_percentage, generate_xticks_labels, get_percentages
+from contents.utils import covid_phases, energies, holidays_dates, fioul_feats, gaz_feats, bioenergies_feats, hydrauliques_feats
+from contents.sides import is_date_between, get_rows_by_date_range, get_df_moved_year, process_evolution_percentage, generate_xticks_labels, get_percentages, sum_columns_values
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from datetime import datetime
@@ -142,6 +142,10 @@ def get_chart_7_data(start_date, end_date):
     df_ener_2022 = pd.read_csv('data/part-energies/XLS/part-energies-fin-2022.xls', sep='\t', encoding='latin-1', index_col=False,usecols=lambda x: x not in [' Stockage batterie', 'DÈstockage batterie', 'Eolien terrestre', 'Eolien offshore'])
     df_concat = pd.concat([df_ener_2019, df_ener_2020, df_ener_2021, df_ener_2022], ignore_index=True)
     df_concat = df_concat.loc[(~df_concat['Consommation'].isnull())]
+    df_concat = sum_columns_values(df_concat, fioul_feats, "Fioul")
+    df_concat = sum_columns_values(df_concat, gaz_feats, "Gaz")
+    df_concat = sum_columns_values(df_concat, hydrauliques_feats, "Hydraulique")
+    df_concat = sum_columns_values(df_concat, bioenergies_feats, "Bioénergies")
     dates = pd.to_datetime(df_concat['Date'] + df_concat['Heures'], format='%Y-%m-%d%H:%M')
     df_concat.insert(1, "FullDate", dates)
     df_concat = df_concat.set_index('FullDate')
