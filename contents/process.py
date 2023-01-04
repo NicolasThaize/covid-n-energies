@@ -1,8 +1,9 @@
 import pandas as pd
 import plotly.express as px
 from contents.utils import covid_phases, energies, holidays_dates
-from contents.sides import is_date_between
+from contents.sides import is_date_between, get_rows_by_date_range, get_df_moved_year, process_evolution_percentage, generate_xticks_labels
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 from datetime import datetime
 
 # Processing data manipulation to return chart 1 final dataframe
@@ -144,10 +145,13 @@ def get_chart_7_data(start_date, end_date):
     dates = pd.to_datetime(df_concat['Date'] + df_concat['Heures'], format='%Y-%m-%d%H:%M')
     df_concat.insert(1, "FullDate", dates)
     df_concat = df_concat.set_index('FullDate')
-    return df_concat.loc[((df_concat['Date'] >= start_date) & (df_concat['Date'] <= end_date)), energies]
+    whole_energies = energies.copy()
+    whole_energies.extend(['Date', 'Heures'])
+    return df_concat.loc[((df_concat['Date'] >= start_date) & (df_concat['Date'] <= end_date)), whole_energies]
 
 def process_chart_7(chart_7_data, start_date, end_date):
     data = []
+    chart_7_data = chart_7_data.loc[:, energies]
     for energy in energies:
         data.append(go.Scatter(
             x = chart_7_data.index,
@@ -182,3 +186,34 @@ def process_chart_7(chart_7_data, start_date, end_date):
                     textangle=270,
                 )
     return chart_1
+
+def process_chart_10(chart_10_data):
+    date_range = covid_phases[0]
+    phase_1 = get_rows_by_date_range(chart_10_data, date_range)
+    phase_2 = get_df_moved_year(chart_10_data, 1, date_range)
+    evolution = process_evolution_percentage(phase_1, phase_2)
+    x_axis_labels = generate_xticks_labels(phase_1, phase_2)
+    final_data = evolution.loc[~evolution['Fioul'].isnull()] *100
+    final_data.index = x_axis_labels
+
+    fig = make_subplots(rows=2, cols=4)
+    row = 1
+    col = 1
+    for energy in energies:
+        fig.add_trace(
+            go.Scatter(x=final_data.index, 
+            y=final_data[energy],
+            name=energy
+            ),
+            row=row, 
+            col=col
+        )
+        col = col + 1
+        if col == 5:
+            col = 1
+            row = 2
+    
+    fig.update_layout(height=1200)
+
+    return fig
+

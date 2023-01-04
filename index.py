@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit_toggle as tog
 from datetime import datetime
 
-from contents.process import get_chart_1_data, process_chart_1, get_chart_3_4_data, process_chart_3, process_chart_4, get_chart_7_data, process_chart_7
+from contents.process import get_chart_1_data, process_chart_1, get_chart_3_4_data, process_chart_3, process_chart_4, get_chart_7_data, process_chart_7, process_chart_10
 
 st.set_page_config(layout="wide")
 st.title('Data Storytelling Covid19 - Énergies')
@@ -50,3 +50,8 @@ chart_7_global_data = get_chart_7_data(start_date, end_date) # Loading whole cha
 chart_7 = process_chart_7(chart_7_global_data, start_date, end_date)
 st.plotly_chart(chart_7, use_container_width=True)
 
+# CHART 10
+st.header('Evolution de la part de production d\'énergie par filières')
+chart_10_data = get_chart_7_data(datetime(2019, 1, 1).strftime('%Y-%m-%d'),datetime(2022, 12, 30).strftime('%Y-%m-%d'))
+chart_10 = process_chart_10(chart_10_data)
+st.plotly_chart(chart_10, use_container_width=True)
