@@ -286,7 +286,7 @@ def process_chart_10(chart_10_data, selected_phase_label, compare_label):
     year_1 = phase_1.index.strftime('%Y').tolist()[0]
     year_2 = phase_2.index.strftime('%Y').tolist()[0]
     x_axis_label = year_1 + "/" + year_2
-    fig.update_layout(height=1200, xaxis_title=x_axis_label, yaxis_title="Evolution part (en%)")
+    fig.update_layout(height=900, xaxis_title=x_axis_label, yaxis_title="Evolution part (en%)")
 
     return fig
 
