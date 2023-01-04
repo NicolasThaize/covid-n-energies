@@ -57,3 +57,5 @@ covid_phases = [
         'label': "Pass sanitaire",
     }
 ]
+
+energies = ["Fioul","Charbon","Gaz","Nucléaire","Eolien","Solaire","Hydraulique","Pompage","Bioénergies"]
