@@ -16,3 +16,4 @@ L’objectif de ce data storytelling est de mettre en avant la consommation et l
 * contents/sides.py : Fonctions de manipulation des dataframes et de données
 * contents/utils.py : Variables globales
 * data/ : Dossier contenant les données brutes utilisées pour le datastorytelling
+* docs/ : Recherches et documentation relative aux données et aux graphiques
