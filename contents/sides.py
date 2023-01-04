@@ -49,10 +49,13 @@ def process_evolution_percentage(df1,df2):
     return div.loc[~div['Fioul'].isnull()] *100
 
 def generate_xticks_labels(df1, df2):
-    phase_1_indexes = df1.index.strftime('%Y-%m-%d %H:%M:%S').tolist()
-    phase_1_indexes = [s + " et " for s in phase_1_indexes]
-    phase_2_indexes = df2.index.strftime('%Y-%m-%d %H:%M:%S').tolist()
-    x_axis_labels = list(map(str.__add__, phase_1_indexes, phase_2_indexes))
+    date = df1.index.strftime('%m-%d %H:%M').tolist()
+    date = [s + " - " for s in date]
+    year_1 = df1.index.strftime('%Y').tolist()
+    year_1 = [s + "/" for s in year_1]
+    year_2 = df2.index.strftime('%Y').tolist()
+    x_axis_labels = list(map(str.__add__, date, year_1))
+    x_axis_labels = list(map(str.__add__, x_axis_labels, year_2))
     return x_axis_labels
 
 def get_percentages(row):
