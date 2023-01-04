@@ -41,13 +41,13 @@ col1, col2 = st.columns(2)
 with col1:
     start_date = st.date_input(
         "Sélectionnez une date de debut",
-        datetime(2021, 7, 6),
+        datetime(2020, 10, 29),
         min_value=datetime(2019, 1, 1),
         max_value=datetime(2022, 12, 28))
 with col2:
     end_date = st.date_input(
         "Sélectionnez une date de fin",
-        datetime(2021, 7, 9),
+        datetime(2020, 12, 15),
         min_value=datetime(2019, 1, 1),
         max_value=datetime(2022, 12, 28))
 start_date = start_date.strftime('%Y-%m-%d')
