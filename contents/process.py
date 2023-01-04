@@ -1,7 +1,7 @@
 import pandas as pd
 import plotly.express as px
 from contents.utils import covid_phases, energies, holidays_dates, fioul_feats, gaz_feats, bioenergies_feats, hydrauliques_feats
-from contents.sides import is_date_between, get_rows_by_date_range, get_df_moved_year, process_evolution_percentage, generate_xticks_labels, get_percentages, sum_columns_values
+from contents.sides import is_date_between, get_rows_by_date_range, get_df_moved_year, process_evolution_percentage, get_percentages, sum_columns_values
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from datetime import datetime
