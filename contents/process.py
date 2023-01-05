@@ -96,7 +96,7 @@ def process_chart_3(chart_3_global_data):
         y=chart_3_global_data["Conso_elec_totale_MW"], 
         labels={
             "x": "Date",
-            "y": "Consommation (MW)",
+            "y": "Consommation (en MW)",
         }
     )
     for covid_phase in covid_phases: # Adding vertical spans/lines for each covid phase
@@ -119,7 +119,7 @@ def process_chart_4(chart_4_global_data):
         y=chart_4_global_data["Conso_gaz_totale_MW"], 
         labels={
             "x": "Date",
-            "y": "Consommation (MW)",
+            "y": "Consommation (en MW)",
         }
     )
     for covid_phase in covid_phases: # Adding vertical spans/lines for each covid phase
@@ -166,7 +166,7 @@ def process_chart_7(chart_7_data, start_date, end_date):
     chart_1 = go.Figure(
         data,
         layout=go.Layout(
-            yaxis=dict(title="Production en MW"),
+            yaxis=dict(title="Production (en MW)"),
             xaxis=dict(title="Date")
         )
     )
@@ -286,7 +286,7 @@ def process_chart_10(chart_10_data, selected_phase_label, compare_label):
     year_1 = phase_1.index.strftime('%Y').tolist()[0]
     year_2 = phase_2.index.strftime('%Y').tolist()[0]
     x_axis_label = year_1 + "/" + year_2
-    fig.update_layout(height=900, xaxis_title=x_axis_label, yaxis_title="Evolution part (en%)")
+    fig.update_layout(height=900, xaxis_title=x_axis_label, yaxis_title="Evolution part (en %)")
 
     return fig
 
