@@ -9,15 +9,20 @@ st.set_page_config(layout="wide")
 st.title('Data Storytelling Covid19 - Énergies')
 
 # CHART 1
-st.header('Nombre de nouveaux cas en France')
-chart_1_toggle = tog.st_toggle_switch(
-    label="Afficher les lundi, vendredi et samedi", 
-    key="Key1", 
-    default_value=False, 
-    inactive_color = '#D3D3D3', 
-    active_color="#11567f", 
-    track_color="#29B5E8"
-) # Streamlit toggler 
+col1, col2 = st.columns(2)
+with col1:
+    st.header('Nombre de nouveaux cas en France')
+
+with col2:
+    chart_1_toggle = tog.st_toggle_switch(
+        label="Afficher les lundi, vendredi et samedi", 
+        key="Key1", 
+        default_value=False, 
+        inactive_color = '#D3D3D3', 
+        active_color="#11567f", 
+        track_color="#29B5E8"
+    ) # Streamlit toggler 
+
 chart_1_global_data = get_chart_1_data(chart_1_toggle) # Loading whole chart data
 chart_1 = process_chart_1(chart_1_global_data)
 st.plotly_chart(chart_1, use_container_width=True)
